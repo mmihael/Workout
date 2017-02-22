@@ -13,7 +13,7 @@ import workout.data.repositories.UserRepository;
 import java.util.Arrays;
 
 /**
- * Created by mihae on 2.2.2017..
+ * Created by mihael on 2.2.2017..
  */
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -31,7 +31,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             User user = userRepository.findByUsername(token.getPrincipal().toString());
             BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
             if (user != null && bcrypt.matches(token.getCredentials().toString(), user.getPassword())) {
-                return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), Arrays.asList(() -> "USER"));
+                return new UsernamePasswordAuthenticationToken(user, user.getPassword(), Arrays.asList(() -> "USER"));
             }
         }
         return null;

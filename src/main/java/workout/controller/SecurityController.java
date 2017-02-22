@@ -18,10 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by mihae on 2.2.2017..
  */
 @RestController
+@RequestMapping(path="/api")
 public class SecurityController {
 
     @Autowired
     AuthenticationManager authenticationManager;
+
+    @RequestMapping(path="/auth-status", method=RequestMethod.GET)
+    ResponseEntity<ObjectNode> authStatus() {
+        ObjectNode json = new ObjectMapper().createObjectNode();
+        json.put("status", "authenticated");
+        return new ResponseEntity<>(json, HttpStatus.OK);
+    }
 
     @RequestMapping(path="/test2", method=RequestMethod.POST)
     ResponseEntity<ObjectNode> login(@RequestBody LoginReq req) {

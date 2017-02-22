@@ -9,7 +9,7 @@ import workout.data.repositories.UserRepository;
 import java.util.List;
 
 /**
- * Created by mihae on 31.1.2017..
+ * Created by mihael on 31.1.2017..
  */
 @RestController
 public class IndexController {

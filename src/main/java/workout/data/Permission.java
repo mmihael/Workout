@@ -13,25 +13,19 @@ import java.util.List;
  * Created by mihael on 1.2.2017..
  */
 @Data
-@ToString(exclude="permissions")
+@ToString(exclude="userPermissions")
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class User {
+public class Permission {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     long id;
-    String username;
-    String password;
-    String email;
-    boolean enabled;
+    String name;
     boolean deleted;
-    Timestamp createdAt;
-    Timestamp editedAt;
-    Long createdBy;
 
     @JsonIgnore
     @OneToMany(fetch=FetchType.LAZY, targetEntity=UserPermissions.class, mappedBy="permissionId")
-    List<UserPermissions> permissions;
+    List<UserPermissions> userPermissions;
 
 }

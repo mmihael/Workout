@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import workout.component.*;
 
 /**
- * Created by mihae on 2.2.2017..
+ * Created by mihael on 2.2.2017..
  */
 @Configuration
 @EnableWebSecurity
@@ -23,13 +23,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint()).and()
             .authorizeRequests()
-                .antMatchers("/", "/login", "/logout", "/css/**", "/js/**", "/favicon.ico").permitAll()
+                .antMatchers("/", "/login", "/logout", "/css/**", "/js/**", "/favicon.ico", "/dev/**").permitAll()
                 .anyRequest().authenticated().and()
             .formLogin()
                 .loginProcessingUrl("/login")
                 .successHandler(new LoginSuccessHandler())
                 .failureHandler(new LoginFailureHandler()).and()
             .logout().logoutSuccessHandler(new CustomLogoutSuccessHandler()).and()
+            .cors().and()
             .csrf().disable();
     }
 
