@@ -31,7 +31,7 @@ public class User {
     Long createdBy;
 
     @JsonIgnore
-    @OneToMany(fetch=FetchType.LAZY, targetEntity=UserPermissions.class, mappedBy="permissionId")
+    @OneToMany(fetch=FetchType.LAZY, targetEntity=UserPermissions.class, mappedBy="userId")
     List<UserPermissions> permissions;
 
 }
