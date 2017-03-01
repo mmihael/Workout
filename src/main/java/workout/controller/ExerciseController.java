@@ -69,6 +69,7 @@ public class ExerciseController {
     @Data
     public static class CreateReq {
         private String name;
+        private Boolean bodyWeight;
     }
 
 }

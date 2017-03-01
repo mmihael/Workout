@@ -10,18 +10,20 @@ import javax.persistence.Id;
 import java.sql.Timestamp;
 
 /**
- * Created by mihael on 22.2.2017..
+ * Created by mihael on 23.2.2017..
  */
-@Data
 @Entity
+@Data
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Exercise {
+public class UsersWorkoutStatistic {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     long id;
-    String name;
-    boolean bodyWeight;
+    long usersWorkout;
+    long workoutExerciseOrder;
+    Double weight;
+    Long reps;
     boolean deleted;
     Timestamp createdAt;
     Timestamp editedAt;

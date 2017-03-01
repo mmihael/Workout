@@ -3,25 +3,22 @@ package workout.data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Created by mihael on 22.2.2017..
+ * Created by mihael on 23.2.2017..
  */
-@Data
 @Entity
+@Data
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Exercise {
+public class UsersWorkout {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     long id;
-    String name;
-    boolean bodyWeight;
+    long workout;
+    long user;
     boolean deleted;
     Timestamp createdAt;
     Timestamp editedAt;
