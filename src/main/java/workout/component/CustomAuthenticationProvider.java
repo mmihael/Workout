@@ -25,9 +25,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         if (authentication != null) {
             UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
-            System.out.println(token);
-            System.out.println(token.getPrincipal().toString());
-            System.out.println(token.getCredentials().toString());
             User user = userRepository.findByUsername(token.getPrincipal().toString());
             BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
             if (user != null && bcrypt.matches(token.getCredentials().toString(), user.getPassword())) {

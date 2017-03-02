@@ -27,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint()).and()
             .authorizeRequests()
-                .antMatchers("/", "/login", "/logout", "/css/**", "/js/**", "/favicon.ico", "/dev/**").permitAll()
+                .antMatchers("/", "/login", "/api/register", "/logout", "/css/**", "/js/**", "/favicon.ico", "/dev/**").permitAll()
                 .anyRequest().authenticated().and()
             .formLogin()
                 .loginProcessingUrl("/login")

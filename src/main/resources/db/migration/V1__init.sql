@@ -16,7 +16,7 @@ CREATE TABLE `user` (
 INSERT INTO user (username, password, email, enabled) VALUES (
  'demo',
  '$2a$06$xcGp9Smb3NQBzve5jgcym.FFvUaXtGQ7EzJwCHGIQQ.jbu2zOS7CC',
- 'mihael.mamula@gmail.com',
+ 'demo@demo.com',
  1
 );
 
