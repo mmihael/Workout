@@ -2,6 +2,7 @@ package workout.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -12,6 +13,7 @@ import java.sql.Timestamp;
 @Entity
 @Data
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Where(clause="deleted=0")
 public class UsersWorkout {
 
     @Id

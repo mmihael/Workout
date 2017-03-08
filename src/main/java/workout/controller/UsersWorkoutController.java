@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Data;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import workout.data.*;
 import workout.data.repositories.*;
+import workout.http.CrudResponseJson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -145,6 +147,28 @@ public class UsersWorkoutController {
         }
 
         return new ResponseEntity<>(json, HttpStatus.OK);
+    }
+
+    @RequestMapping(path="/{id:^[1-9]+[0-9]*$}", method=RequestMethod.DELETE)
+    public ResponseEntity<CrudResponseJson> deleteUsersWorkout(@PathVariable(name="id") long id, @AuthenticationPrincipal User user) {
+        CrudResponseJson res = new CrudResponseJson();
+        UsersWorkout usersWorkout = usersWorkoutRepository.findTop1ByIdAndUser(id, user.getId());
+        if (usersWorkout != null) {
+            List<UsersWorkoutStatistic> usersWorkoutStatistics = usersWorkoutStatisticRepository.findByUsersWorkout(usersWorkout.getId());
+            if (CollectionUtils.isNotEmpty(usersWorkoutStatistics)) {
+                for (UsersWorkoutStatistic usersWorkoutStatistic : usersWorkoutStatistics) {
+                    usersWorkoutStatistic.setDeleted(true);
+                }
+                usersWorkoutStatisticRepository.save(usersWorkoutStatistics);
+            }
+            usersWorkout.setDeleted(true);
+            usersWorkoutRepository.save(usersWorkout);
+            res.setMessage("User's workout deleted");
+        } else {
+            res.setStatus(CrudResponseJson.CrudStatus.ERROR.getId());
+            res.setMessage("Failed deleting workout");
+        }
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
 }

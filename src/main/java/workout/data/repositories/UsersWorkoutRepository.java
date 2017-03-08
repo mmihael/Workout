@@ -15,4 +15,6 @@ public interface UsersWorkoutRepository extends PagingAndSortingRepository<Users
 
     List<UsersWorkout> findByUserOrderByCreatedAtDesc(long userId);
 
+    UsersWorkout findTop1ByIdAndUser(long id, long user);
+
 }

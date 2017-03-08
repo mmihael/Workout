@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .addMapping("/**")
                         .allowedOrigins("*")
                         .allowedHeaders("*")
-                        .allowedMethods("GET", "POST", "HEAD", "PATCH", "PUT", "OPTIONS");
+                        .allowedMethods("GET", "POST", "HEAD", "DELETE", "PATCH", "PUT", "OPTIONS");
             }
         };
     }
