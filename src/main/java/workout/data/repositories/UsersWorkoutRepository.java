@@ -4,6 +4,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import workout.data.UsersWorkout;
 import workout.data.Workout;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -16,5 +17,7 @@ public interface UsersWorkoutRepository extends PagingAndSortingRepository<Users
     List<UsersWorkout> findByUserOrderByCreatedAtDesc(long userId);
 
     UsersWorkout findTop1ByIdAndUser(long id, long user);
+
+    UsersWorkout findTop1ByWorkoutAndUserAndCreatedAtBeforeOrderByCreatedAtDesc(long workoutId, long userId, Timestamp createdAt);
 
 }

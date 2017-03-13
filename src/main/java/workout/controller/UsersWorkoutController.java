@@ -51,6 +51,11 @@ public class UsersWorkoutController {
         ObjectNode json = mapper.createObjectNode();
 
         UsersWorkout usersWorkout = usersWorkoutRepository.findOne(id);
+        UsersWorkout lastWorkout = usersWorkoutRepository.findTop1ByWorkoutAndUserAndCreatedAtBeforeOrderByCreatedAtDesc(
+            usersWorkout.getWorkout(),
+            usersWorkout.getUser(),
+            usersWorkout.getCreatedAt()
+        );
         List<UsersWorkoutStatistic> usersWorkoutStatistics = usersWorkoutStatisticRepository.findByUsersWorkout(usersWorkout.getId());
         Workout workout = workoutRepository.findOne(usersWorkout.getWorkout());
         List<WorkoutExerciseOrder> workoutExerciseOrder = workoutExerciseOrderRepository.findByWorkout(workout.getId());
@@ -66,7 +71,12 @@ public class UsersWorkoutController {
                 .collect(Collectors.toMap(e -> e.getId(), e -> e))
         );
         json.putPOJO("usersWorkoutStatistics", usersWorkoutStatistics.stream().collect(Collectors.toMap(e -> e.getWorkoutExerciseOrder(), e -> e)));
-
+        if (lastWorkout != null) {
+            List<UsersWorkoutStatistic> lastStatistics = usersWorkoutStatisticRepository.findByUsersWorkout(lastWorkout.getId());
+            if (CollectionUtils.isNotEmpty(lastStatistics)) {
+                json.putPOJO("lastStatistics", lastStatistics.stream().collect(Collectors.toMap(e -> e.getWorkoutExerciseOrder(), e -> e)));
+            }
+        }
         return new ResponseEntity<>(json, HttpStatus.OK);
     }
 
