@@ -181,4 +181,25 @@ public class UsersWorkoutController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @RequestMapping(path="/latest/{id:^[1-9]+[0-9]*$}", method=RequestMethod.GET)
+    public ResponseEntity<ObjectNode> getLatestUserWorkouts(@PathVariable(name="id") long workoutId, @AuthenticationPrincipal User user) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode json = mapper.createObjectNode();
+        Workout workout = workoutRepository.findOne(workoutId);
+        json.putPOJO("workout", workout);
+        List<UsersWorkout> usersWorkouts = usersWorkoutRepository.findTop10ByUserAndWorkoutOrderByCreatedAtDesc(user.getId(), workoutId);
+        Map<Long, List<UsersWorkoutStatistic>> usersWorkoutStatistics = usersWorkoutStatisticRepository
+                .findByUsersWorkoutIn(usersWorkouts.stream().map(UsersWorkout::getId).collect(Collectors.toList()))
+                .stream().collect(Collectors.groupingBy(UsersWorkoutStatistic::getUsersWorkout));
+        ArrayNode arrayNode = mapper.createArrayNode();
+        for (UsersWorkout usersWorkout : usersWorkouts) {
+            ObjectNode objectNode = mapper.createObjectNode();
+            objectNode.putPOJO("usersWorkout", usersWorkout);
+            objectNode.putPOJO("usersWorkoutStatistics", usersWorkoutStatistics.get(usersWorkout.getId()));
+            arrayNode.add(objectNode);
+        }
+        json.putPOJO("statistics", arrayNode);
+        return new ResponseEntity<>(json, HttpStatus.OK);
+    }
+
 }

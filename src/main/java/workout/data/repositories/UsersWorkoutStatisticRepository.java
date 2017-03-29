@@ -3,6 +3,7 @@ package workout.data.repositories;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import workout.data.UsersWorkoutStatistic;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -11,5 +12,7 @@ import java.util.List;
 public interface UsersWorkoutStatisticRepository extends PagingAndSortingRepository<UsersWorkoutStatistic, Long> {
 
     List<UsersWorkoutStatistic> findByUsersWorkout(long id);
+
+    List<UsersWorkoutStatistic> findByUsersWorkoutIn(Collection<Long> ids);
 
 }
