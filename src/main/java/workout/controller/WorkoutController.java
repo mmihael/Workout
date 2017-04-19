@@ -46,12 +46,12 @@ public class WorkoutController {
     WorkoutExerciseOrderRepository workoutExerciseOrderRepository;
 
     @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<ArrayNode> getAll() {
+    public ResponseEntity<ArrayNode> getAll(@AuthenticationPrincipal User user) {
         ObjectMapper om = new ObjectMapper();
         ArrayNode resBody = om.createArrayNode();
 
-        Iterable<Workout> workouts = workoutRepository.findAll();
-        Iterable<Exercise> exercises = exerciseRepository.findAll();
+        Iterable<Workout> workouts = workoutRepository.findByCreatedBy(user.getId());
+        Iterable<Exercise> exercises = exerciseRepository.findByCreatedBy(user.getId());
 
         Map<Long, Exercise> exercisesMap = new HashMap<>();
         for (Exercise exercise : exercises) { exercisesMap.put(exercise.getId(), exercise); }

@@ -32,8 +32,8 @@ public class ExerciseController {
     ExerciseRepository exerciseRepository;
 
     @RequestMapping(method=RequestMethod.GET)
-    public Iterable<Exercise> getAll() {
-        return exerciseRepository.findAll();
+    public Iterable<Exercise> getAll(@AuthenticationPrincipal User user) {
+        return exerciseRepository.findByCreatedBy(user.getId());
     }
 
     @RequestMapping(method=RequestMethod.POST)

@@ -46,7 +46,7 @@ public class UsersWorkoutController {
     UsersWorkoutRepository usersWorkoutRepository;
 
     @RequestMapping(path="/{id:^[1-9]+[0-9]*$}", method=RequestMethod.GET)
-    public ResponseEntity<ObjectNode> getUsersWorkout(@PathVariable(name="id") long id) {
+    public ResponseEntity<ObjectNode> getUsersWorkout(@PathVariable(name="id") long id, @AuthenticationPrincipal User user) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode json = mapper.createObjectNode();
 

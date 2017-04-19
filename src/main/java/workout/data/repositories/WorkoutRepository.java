@@ -9,6 +9,8 @@ import workout.data.Workout;
  */
 public interface WorkoutRepository extends PagingAndSortingRepository<Workout, Long> {
 
+    Iterable<Workout> findByCreatedBy(long createdBy);
+
     Workout findByName(String name);
 
 }
