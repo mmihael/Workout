@@ -15,6 +15,7 @@ import workout.data.*;
 import workout.data.repositories.*;
 import workout.http.CrudResponseJson;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -90,12 +91,14 @@ public class UsersWorkoutController {
             usersWorkout.setWorkout(workout.getId());
             usersWorkout.setUser(user.getId());
             usersWorkout.setCreatedBy(user.getId());
+            usersWorkout.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             usersWorkoutRepository.save(usersWorkout);
         }
 
         List<UsersWorkoutStatistic> usersWorkoutStatistics = new ArrayList<>();
 
         if (usersWorkout != null) {
+
             List<WorkoutExerciseOrder> workoutExerciseOrder = workoutExerciseOrderRepository.findByWorkout(workout.getId());
             for (WorkoutExerciseOrder item : workoutExerciseOrder) {
                 UsersWorkoutStatistic usersWorkoutStatistic = new UsersWorkoutStatistic();
@@ -104,6 +107,31 @@ public class UsersWorkoutController {
                 usersWorkoutStatistic.setCreatedBy(user.getId());
                 usersWorkoutStatistics.add(usersWorkoutStatistic);
             }
+
+            if (req.isCopyLast()) {
+                UsersWorkout lastWorkout = usersWorkoutRepository.findTop1ByWorkoutAndUserAndCreatedAtBeforeOrderByCreatedAtDesc(
+                        req.getWorkout(),
+                        user.getId(),
+                        usersWorkout.getCreatedAt()
+                );
+                List<UsersWorkoutStatistic> lastStatistics = null;
+                if (lastWorkout != null) {
+                    lastStatistics = usersWorkoutStatisticRepository.findByUsersWorkout(lastWorkout.getId());
+                }
+                if (CollectionUtils.isNotEmpty(lastStatistics) && lastStatistics.size() == usersWorkoutStatistics.size()) {
+                    for (UsersWorkoutStatistic usersWorkoutStatistic : usersWorkoutStatistics) {
+                        UsersWorkoutStatistic target = lastStatistics.
+                                stream().
+                                filter(e -> e.getWorkoutExerciseOrder() == usersWorkoutStatistic.getWorkoutExerciseOrder()).
+                                findFirst().
+                                orElse(null);
+                        if (target != null) {
+                            usersWorkoutStatistic.setWeight(target.getWeight());
+                        }
+                    }
+                }
+            }
+
             usersWorkoutStatisticRepository.save(usersWorkoutStatistics);
         }
 
@@ -115,6 +143,7 @@ public class UsersWorkoutController {
     @Data
     public static class CreateUsersWorkoutRequest {
         long workout;
+        boolean copyLast;
     }
 
     @Data
